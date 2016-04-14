@@ -17,7 +17,9 @@
          $edificio=mysql_escape_string($_REQUEST['edificio']);
          $numero=mysql_escape_string($_REQUEST['numero']);
         
-      }$date=date("Y-m-d");
+      }
+	$date=date("Y-m-d H:i:s");
+       
      //Creamos nuestra consulta sql
      $query="insert into clientes (movil, cedula, fullname, sexo, email, telefono, password, reg_date) value ('$celular', '$cedula', '$nombre','$sexo','$email','$telefono','$clave','$date')";
   

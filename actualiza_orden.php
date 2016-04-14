@@ -28,16 +28,15 @@ if(isset($_REQUEST['id_orden']) && !empty($_REQUEST['id_orden']))
 	$resultados = array();
 	$resultados["hora"] = date("F j, Y, g:i a"); 
 	$resultados["generador"] = "Enviado desde Solo Plancho" ;
-	$query="select o.status,id_orden,cedula,fullname,movil,email from orden_servicios o,clientes where reg_id=id_cliente  
-		and id_orden='$usu' and cedula='$ced' limit 1";
+	$query="select o.status,id_orden,cedula,fullname,movil,email from orden_servicios o,clientes where reg_id=id_cliente and id_orden='$usu' and cedula='$ced' limit 1";
 	$res = mysql_query($query);
-	$date=date("Y-m-d");
+	$date=date("Y-m-d H:i:s");
 	if($res){
 		$row=mysql_fetch_array($res);
 	}else{
 		$row=array();
 	}
-    if(count($row)){
+    if(count($row)>1){
 	if($row['status']=='2'){
 		$q="update orden_servicios set status='3' where id_orden='$usu'";
         	$result = mysql_query($q);
@@ -48,21 +47,30 @@ if(isset($_REQUEST['id_orden']) && !empty($_REQUEST['id_orden']))
         		$resulta = mysql_query($up2);
 			$query="select uo.id_orden,email from usuario_ordenes uo, usuarios u where u.id_usuario=uo.id_usuario and uo.id_orden='$usu' and uo.status='3' limit 1";
 			$res = mysql_query($query);
-			$deli=array();
-			$deli['email']=$row['email'];
-			$deli=mysql_fetch_array($res);
+				$deli=array();
+			if($res){
+				$deli=mysql_fetch_array($res);
+			}else{
+				$deli['email']=$row['email'];
+			}
+			
+			$resultados["error"] = "1";
 			$are=array(0=>strtolower(trim($row['email'])),1=>strtolower(trim($deli['email'])));
-                        $mensaje="La orden de servicio de planchado # $usu Recibida por Delivery \n por soloplancho empresa líder en planchado también visite nuestra web http://www.soloplancho.com\n"
+                        $mensaje="Estimado(a): ".$row['fullname']."\n\n\t\t La orden de servicio de planchado # $usu Recibida por Delivery \n por soloplancho empresa líder en planchado también visite nuestra web http://www.soloplancho.com\n"
                                . "Su cuenta email: ".strtolower(trim($row['email']));
                         enviar_mensaje($are, $mensaje, 'ORDEN SERVICIO RECIBIDA POR DELIVERY, SOLOPLANCHO.COM');
                         
-			$resultados["error"] = "1";
+			
 		}else{
-			$resultados["mensaje"] = "Error actualizando orden";
+			$resultados["mensaje"] = "Error actualizando orden ($usu)";
 			$resultados["error"] = "2";
 		}
 	}else
 	if($row['status']=='9'){
+	    $sql="select status,forma_pago from pago_ordenes where id_orden='$usu' limit 1";
+            $resulp = mysql_query($sql);
+	    $pago=mysql_fetch_array($resulp);
+	    if($pago['status']=='2'){
 		$q="update orden_servicios set status='10',fecha_entrega='$date' where id_orden='$usu'";
 	        $result = mysql_query($q);
 		if( $result){
@@ -73,14 +81,19 @@ if(isset($_REQUEST['id_orden']) && !empty($_REQUEST['id_orden']))
 			$deli=array();
 			$deli['email']=$row['email'];
 			$deli=mysql_fetch_array($res);
-			$are=array(0=>strtolower(trim($row['email'])),1=>strtolower(trim($deli['email'])));
-                        $mensaje="La orden de servicio de planchado # $usu Entregada Al Cliente \n por soloplancho empresa líder en planchado también visite nuestra web http://www.soloplancho.com\n"
-                        ."Su cuenta email: ".strtolower(trim($row['email']));
-                        enviar_mensaje($are, $mensaje, 'ORDEN SERVICIO ENTREGADA AL CLIENTE, SOLOPLANCHO.COM');			
 			$resultados["mensaje"] = "Orden # $usu Entregada Al Cliente";
 			$resultados["error"] = "1";
+			$are=array(0=>strtolower(trim($row['email'])),1=>strtolower(trim($deli['email'])));
+                        $mensaje="Estimado(a): ".$row['fullname']."\n\n\t\t La orden de servicio de planchado # $usu Entregada Al Cliente \n por soloplancho empresa líder en planchado también visite nuestra web http://www.soloplancho.com\n"
+                        ."Su cuenta email: ".strtolower(trim($row['email']));
+                        enviar_mensaje($are, $mensaje, 'ORDEN SERVICIO ENTREGADA AL CLIENTE, SOLOPLANCHO.COM');			
+			
 		}else{
-			$resultados["mensaje"] = "Error actualizando orden";
+			$resultados["mensaje"] = "Error actualizando orden ($usu)";
+			$resultados["error"] = "2";
+		}
+	    }else{
+			$resultados["mensaje"] = "Orden de servicio ($usu) no se a cancelado, verifique forma pago y actualice";
 			$resultados["error"] = "2";
 		}
 	}
@@ -92,7 +105,7 @@ if(isset($_REQUEST['id_orden']) && !empty($_REQUEST['id_orden']))
 		$resultados["error"] = "4";
 	}
     }else{
-	$resultados["mensaje"] = "Error faltan datos";
+	$resultados["mensaje"] = "Error Qr Cliente incorrecto verifique datos del cliente";
 	$resultados["error"] = "3";
 	}
 }else{

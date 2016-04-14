@@ -1,5 +1,5 @@
 <?php
  header("Access-Control-Allow-Origin: *");
- mysql_connect("localhost","root","Ch4N63m4.");
+ mysql_connect("localhost","root","12");
  mysql_select_db("soloplancho");
 ?>

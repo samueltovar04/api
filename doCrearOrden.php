@@ -42,7 +42,7 @@ $peso_libras=$cantidad_piezas=$recepcion=$id_cliente=$id_empresa=0;
         $precio= $peso_libras * $rowCosto['valor']; 
      }
     else{ 
-        $precio= $peso_libras * 15000; 
+        $precio= $peso_libras * 12000; 
      }
 
      /*momentaneo*/
