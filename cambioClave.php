@@ -8,7 +8,7 @@ if(isset($_REQUEST['newpas']) && !empty($_REQUEST['newpas']))
 	$usu = $_REQUEST['email'];
 	$resultados = array();
 
-		$q="update usuarios set password='$clave' where email='$usu'";
+		$q="update usuarios set clave='$clave' where email='$usu'";
         	$result = mysql_query($q);
 	
 		if( $result){
