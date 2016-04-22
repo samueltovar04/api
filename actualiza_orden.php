@@ -25,6 +25,13 @@ if(isset($_REQUEST['id_orden']) && !empty($_REQUEST['id_orden']))
 	}else{
 		$ced =0;
 	}	
+
+	if(isset($_REQUEST['latitud'])){
+		$lat = $_REQUEST['latitud'];
+		$long = $_REQUEST['longitud'];
+		$gps="update clientes set latitud='$lat', longitud='$long' where latitud='0' and cedula='$ced'";
+		$resup = mysql_query($gps);
+	}
 	$resultados = array();
 	$resultados["hora"] = date("F j, Y, g:i a"); 
 	$resultados["generador"] = "Enviado desde Solo Plancho" ;
