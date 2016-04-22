@@ -17,11 +17,9 @@ if(!isset($_REQUEST['id_usuario'])){
 		while ($row=mysql_fetch_object($q)){
 			if($row->Cedula!=NULL)
 			$data[]=$row;
-   		}	
-   		foreach($data as $key=>$value){
-	$q="update usuario_ordenes set notify=1 where id_orden='".$value['Orden']."' and id_usuario='$idc'";
+			$q="update usuario_ordenes set notify=1 where id_orden='".$row->Orden."' and id_usuario='$idc'";
 			mysql_query($q);
-		}
+   		}
 	}
 }
 $resultadosJson= json_encode($data);
