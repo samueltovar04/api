@@ -143,7 +143,6 @@ function enviar_mensaje($log,$mensaje,$asunto)
        }  
      else{//echo 'Failed the cURL Initialization. Check that you have de cURL Extension installed and activated; or contact our technical support at Woopi: http://www.woopi.com.ar';  
      }  
- }  
- enviar_curl();  
+ }
 
 ?>
