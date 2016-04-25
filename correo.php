@@ -117,21 +117,24 @@ function enviar_mensaje($log,$mensaje,$asunto)
 
  function enviar_curl($url, $post_data){  
      if($curl_connection = curl_init($url))  
-       {  
-         curl_setopt($curl_connection, CURLOPT_CONNECTTIMEOUT, 30);  
-         curl_setopt($curl_connection, CURLOPT_USERAGENT,  
-         "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)");  
-         curl_setopt($curl_connection, CURLOPT_RETURNTRANSFER, true);  
-         curl_setopt($curl_connection, CURLOPT_SSL_VERIFYPEER, false);  
-         curl_setopt($curl_connection, CURLOPT_FOLLOWLOCATION, 1);  
-
-     foreach ( $post_data as $key => $value)  
      {  
-       $post_items[] = $key . '=' . $value;  
-     }  
-     $post_string = implode ('&', $post_items);    
+	$post_string = json_encode($post_data); 
+        curl_setopt($curl_connection, CURLOPT_CONNECTTIMEOUT, 30);  
+        curl_setopt($curl_connection, CURLOPT_USERAGENT,  
+        "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)");  
+        curl_setopt($curl_connection, CURLOPT_RETURNTRANSFER, true);  
+        curl_setopt($curl_connection, CURLOPT_SSL_VERIFYPEER, false);  
+        curl_setopt($curl_connection, CURLOPT_FOLLOWLOCATION, 1); 
+	curl_setopt($curl_connection, CURLOPT_POSTFIELDS, $post_string); 
+	curl_setopt($curl_connection, CURLOPT_HTTPHEADER, array('Content-Type: application/json','Content-Length: '.strlen($data_string)));    
+
+     //foreach ( $post_data as $key => $value)  
+     //{  
+     //  $post_items[] = $key . '=' . $value;  
+     //}  
+     //$post_string = implode ('&', $post_items);    
      /* Seteamos las variables que vamos a enviar y el tipo*/  
-     curl_setopt($curl_connection, CURLOPT_POSTFIELDS, $post_string);  
+     //curl_setopt($curl_connection, CURLOPT_POSTFIELDS, $post_string);  
      //ejecuta el envio  
      $result = curl_exec($curl_connection);  
      //muestra los resultados del proceso  
