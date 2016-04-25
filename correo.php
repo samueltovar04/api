@@ -135,13 +135,13 @@ function enviar_mensaje($log,$mensaje,$asunto)
      //ejecuta el envio  
      $result = curl_exec($curl_connection);  
      //muestra los resultados del proceso  
-     //print_r(curl_getinfo($curl_connection));  
-     //echo curl_errno($curl_connection) . '-' .  
+     print_r(curl_getinfo($curl_connection));  
+     echo curl_errno($curl_connection) . '-' .  
              //curl_error($curl_connection);  
      //cierra la conexión  
      curl_close($curl_connection);  
        }  
-     else{//echo 'Failed the cURL Initialization. Check that you have de cURL Extension installed and activated; or contact our technical support at Woopi: http://www.woopi.com.ar';  
+     else{ echo 'Failed the cURL Initialization. Check that you have de cURL Extension installed and activated; or contact our technical support at Woopi: http://www.woopi.com.ar';  
      }  
  }
 
