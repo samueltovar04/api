@@ -48,7 +48,7 @@ if(isset($_REQUEST['id_orden']) && !empty($_REQUEST['id_orden']))
 		$q="update orden_servicios set status='3' where id_orden='$usu'";
         	$result = mysql_query($q);
 	
-		if( $result){
+		if($result){
 			$resultados["mensaje"] = "Orden # $usu Recibida por Delivery";
 			$up2="update usuario_ordenes set status='3',fecha_cumple='$date' where id_orden='$usu' and status='1'";
         		$resulta = mysql_query($up2);
