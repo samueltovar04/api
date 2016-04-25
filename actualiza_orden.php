@@ -21,11 +21,13 @@ if(isset($_REQUEST['id_orden']) && !empty($_REQUEST['id_orden']))
 		$resup = mysql_query($gps);
 	}
 
-	$query="select o.status,id_orden,cedula,fullname,movil,email from orden_servicios o,clientes where reg_id=id_cliente and id_orden='$usu' and cedula='$ced' limit 1";
+	$query="select o.status,id_orden,reg_id,cedula,fullname,movil,email from orden_servicios o,clientes where reg_id=id_cliente and id_orden='$usu' and cedula='$ced' limit 1";
 	$res = mysql_query($query);
 	$date=date("Y-m-d H:i:s");
+	$cli="";
 	if($res){
 		$row=mysql_fetch_array($res);
+		$cli=$row['reg_id'];
 	}else{
 		$row=array();
 	}
@@ -52,7 +54,9 @@ if(isset($_REQUEST['id_orden']) && !empty($_REQUEST['id_orden']))
 			$are=array(0=>strtolower(trim($row['email'])),1=>strtolower(trim($deli['email'])));
                         $mensaje="Estimado(a): ".$row['fullname']."\n\n\t\t La orden de servicio de planchado # $usu Recibida por Delivery \n por soloplancho empresa líder en planchado también visite nuestra web http://www.soloplancho.com\n"
                                . "Su cuenta email: ".strtolower(trim($row['email']));
-                        @enviar_mensaje($are, $mensaje, 'ORDEN SERVICIO RECIBIDA POR DELIVERY, SOLOPLANCHO.COM');
+			$arreglo=array('id_cliente'=>$cli,'titulo'=>"ORDEN SERVICIO RECIBIDA POR DELIVERY",'mensaje'=>$mensaje);
+			enviar_curl("http://api.soloplancho.com/notifications/sendNotification.php", $arreglo);
+                        enviar_mensaje($are, $mensaje, 'ORDEN SERVICIO RECIBIDA POR DELIVERY, SOLOPLANCHO.COM');
                         
 			
 		}else{
@@ -80,6 +84,8 @@ if(isset($_REQUEST['id_orden']) && !empty($_REQUEST['id_orden']))
 			$are=array(0=>strtolower(trim($row['email'])),1=>strtolower(trim($deli['email'])));
                         $mensaje="Estimado(a): ".$row['fullname']."\n\n\t\t La orden de servicio de planchado # $usu Entregada Al Cliente \n por soloplancho empresa líder en planchado también visite nuestra web http://www.soloplancho.com\n"
                         ."Su cuenta email: ".strtolower(trim($row['email']));
+			$arreglo=array('id_cliente'=>$cli,'titulo'=>"ORDEN SERVICIO ENTREGADA",'mensaje'=>$mensaje);
+			enviar_curl("http://api.soloplancho.com/notifications/sendNotification.php", $arreglo);
                         enviar_mensaje($are, $mensaje, 'ORDEN SERVICIO ENTREGADA AL CLIENTE, SOLOPLANCHO.COM');			
 			
 		}else{

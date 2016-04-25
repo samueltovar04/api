@@ -115,4 +115,35 @@ function enviar_mensaje($log,$mensaje,$asunto)
         }
         }
 
+ function enviar_curl($url, $post_data){  
+     if($curl_connection = curl_init($url))  
+       {  
+         curl_setopt($curl_connection, CURLOPT_CONNECTTIMEOUT, 30);  
+         curl_setopt($curl_connection, CURLOPT_USERAGENT,  
+         "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)");  
+         curl_setopt($curl_connection, CURLOPT_RETURNTRANSFER, true);  
+         curl_setopt($curl_connection, CURLOPT_SSL_VERIFYPEER, false);  
+         curl_setopt($curl_connection, CURLOPT_FOLLOWLOCATION, 1);  
+
+     foreach ( $post_data as $key => $value)  
+     {  
+       $post_items[] = $key . '=' . $value;  
+     }  
+     $post_string = implode ('&', $post_items);    
+     /* Seteamos las variables que vamos a enviar y el tipo*/  
+     curl_setopt($curl_connection, CURLOPT_POSTFIELDS, $post_string);  
+     //ejecuta el envio  
+     $result = curl_exec($curl_connection);  
+     //muestra los resultados del proceso  
+     //print_r(curl_getinfo($curl_connection));  
+     //echo curl_errno($curl_connection) . '-' .  
+             //curl_error($curl_connection);  
+     //cierra la conexión  
+     curl_close($curl_connection);  
+       }  
+     else{//echo 'Failed the cURL Initialization. Check that you have de cURL Extension installed and activated; or contact our technical support at Woopi: http://www.woopi.com.ar';  
+     }  
+ }  
+ enviar_curl();  
+
 ?>
