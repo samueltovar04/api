@@ -1,22 +1,10 @@
 <?php
 include('correo.php');
 include('db.php');
-
-/* 
-
-if($registro['status']=='20') $chek='Anulada';
-if($registro['status']=='1') $chek='Nueva Orden'; 
-if($registro['status']=='2') $chek='Asignada Delivery';
-if($registro['status']=='3') $chek='Entregada Delivery';
-if($registro['status']=='4') $chek='En Tienda';
-if($registro['status']=='5') $chek='Asignada Operador';
-if($registro['status']=='6') $chek='Planchada';
-if($registro['status']=='7') $chek='Pendiente Pago';
-if($registro['status']=='8') $chek='Cancelada';
-if($registro['status']=='9') $chek='Enviada';
-if($registro['status']=='10') $chek='Entregada Cliente';
-if($registro['status']=='11') $chek='>Observación';
- */
+	$resultados = array();
+	$resultados["error"] = "1";
+	$resultados["hora"] = date("F j, Y, g:i a"); 
+	$resultados["generador"] = "Enviado desde Solo Plancho" ;
 if(isset($_REQUEST['id_orden']) && !empty($_REQUEST['id_orden']))
 {
 	$usu = $_REQUEST['id_orden'];
@@ -32,9 +20,7 @@ if(isset($_REQUEST['id_orden']) && !empty($_REQUEST['id_orden']))
 		$gps="update clientes set latitud='$lat', longitud='$long' where latitud='0' and cedula='$ced'";
 		$resup = mysql_query($gps);
 	}
-	$resultados = array();
-	$resultados["hora"] = date("F j, Y, g:i a"); 
-	$resultados["generador"] = "Enviado desde Solo Plancho" ;
+
 	$query="select o.status,id_orden,cedula,fullname,movil,email from orden_servicios o,clientes where reg_id=id_cliente and id_orden='$usu' and cedula='$ced' limit 1";
 	$res = mysql_query($query);
 	$date=date("Y-m-d H:i:s");
@@ -50,6 +36,7 @@ if(isset($_REQUEST['id_orden']) && !empty($_REQUEST['id_orden']))
 	
 		if($result){
 			$resultados["mensaje"] = "Orden # $usu Recibida por Delivery";
+			$resultados["error"] = "1";
 			$up2="update usuario_ordenes set status='3',fecha_cumple='$date' where id_orden='$usu' and status='1'";
         		$resulta = mysql_query($up2);
 			$query="select uo.id_orden,email from usuario_ordenes uo, usuarios u where u.id_usuario=uo.id_usuario and uo.id_orden='$usu' and uo.status='3' limit 1";
@@ -61,11 +48,11 @@ if(isset($_REQUEST['id_orden']) && !empty($_REQUEST['id_orden']))
 				$deli['email']=$row['email'];
 			}
 			
-			$resultados["error"] = "1";
+			
 			$are=array(0=>strtolower(trim($row['email'])),1=>strtolower(trim($deli['email'])));
                         $mensaje="Estimado(a): ".$row['fullname']."\n\n\t\t La orden de servicio de planchado # $usu Recibida por Delivery \n por soloplancho empresa líder en planchado también visite nuestra web http://www.soloplancho.com\n"
                                . "Su cuenta email: ".strtolower(trim($row['email']));
-                        enviar_mensaje($are, $mensaje, 'ORDEN SERVICIO RECIBIDA POR DELIVERY, SOLOPLANCHO.COM');
+                        @enviar_mensaje($are, $mensaje, 'ORDEN SERVICIO RECIBIDA POR DELIVERY, SOLOPLANCHO.COM');
                         
 			
 		}else{
@@ -108,7 +95,7 @@ if(isset($_REQUEST['id_orden']) && !empty($_REQUEST['id_orden']))
 		$resultados["mensaje"] = "Orden no esta en satus Asignada Delivery o Enviada al Cliente";
 		$resultados["status"] = $row["status"];
 		$resultados["id_orden"] = $row["id_orden"];
-		$resultados["nombre"] = " Cliente: ".$row["cedula"]." ".$row["fullname"]." <br> Teléfono Movil: ".$row["movil"]."<br> Correo: ".$row["correo"];
+		$resultados["nombre"] = " Cliente: ".$row["cedula"]." ".$row["fullname"]." <br> Teléfono Movil: ".$row["movil"];
 		$resultados["error"] = "4";
 	}
     }else{
