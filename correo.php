@@ -126,7 +126,7 @@ function enviar_mensaje($log,$mensaje,$asunto)
         curl_setopt($curl_connection, CURLOPT_SSL_VERIFYPEER, false);  
         curl_setopt($curl_connection, CURLOPT_FOLLOWLOCATION, 1); 
 	curl_setopt($curl_connection, CURLOPT_POSTFIELDS, $post_string); 
-	curl_setopt($curl_connection, CURLOPT_HTTPHEADER, array('Content-Type: application/json','Content-Length: '.strlen($data_string)));    
+	curl_setopt($curl_connection, CURLOPT_HTTPHEADER, array('Content-Type: application/json','Content-Length: '.strlen($post_string)));    
 
      //foreach ( $post_data as $key => $value)  
      //{  
@@ -138,13 +138,13 @@ function enviar_mensaje($log,$mensaje,$asunto)
      //ejecuta el envio  
      $result = curl_exec($curl_connection);  
      //muestra los resultados del proceso  
-     print_r(curl_getinfo($curl_connection));  
-     echo curl_errno($curl_connection) . '-' .  
+     //print_r(curl_getinfo($curl_connection));  
+     //echo curl_errno($curl_connection) . '-' .  
              //curl_error($curl_connection);  
      //cierra la conexión  
      curl_close($curl_connection);  
        }  
-     else{ echo 'Failed the cURL Initialization. Check that you have de cURL Extension installed and activated; or contact our technical support at Woopi: http://www.woopi.com.ar';  
+     else{ //echo 'Failed the cURL Initialization. Check that you have de cURL Extension installed and activated; or contact our technical support at Woopi: http://www.woopi.com.ar';  
      }  
  }
 
