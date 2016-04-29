@@ -1,25 +1,23 @@
 <?php 
  include "db.php"; 
- if(isset($_REQUEST['email'])) 
+ if(isset($_GET['email'])) 
  { 
-     $celular=mysql_escape_string($_REQUEST['movil']);
-     $email=mysql_escape_string($_REQUEST['email']);
-     $cedula=mysql_escape_string($_REQUEST['cedula']);
-     $nombre=mysql_escape_string($_REQUEST['fullname']);
-     $sexo=mysql_escape_string($_REQUEST['sexo']);
-     $telefono=mysql_escape_string($_REQUEST['telefono']);
+     $celular=mysql_escape_string($_GET['movil']);
+     $email=mysql_escape_string($_GET['email']);
+     $cedula=mysql_escape_string($_GET['cedula']);
+     $nombre=mysql_escape_string($_GET['fullname']);
+     $sexo=mysql_escape_string($_GET['sexo']);
+     $telefono=mysql_escape_string($_GET['telefono']);
 
-     $clave=mysql_escape_string($_REQUEST['password']);
-    if(isset($_REQUEST['localidad'])){
-         $ciudad=mysql_escape_string($_REQUEST['ciudad']);
-         $localidad=mysql_escape_string($_REQUEST['localidad']);
-         $av=mysql_escape_string($_REQUEST['calle_av']);
-         $edificio=mysql_escape_string($_REQUEST['edificio']);
-         $numero=mysql_escape_string($_REQUEST['numero']);
+     $clave=mysql_escape_string($_GET['password']);
+    if(isset($_GET['localidad'])){
+         $ciudad=mysql_escape_string($_GET['ciudad']);
+         $localidad=mysql_escape_string($_GET['localidad']);
+         $av=mysql_escape_string($_GET['calle_av']);
+         $edificio=mysql_escape_string($_GET['edificio']);
+         $numero=mysql_escape_string($_GET['numero']);
         
-      }
-	$date=date("Y-m-d H:i:s");
-       
+      }$date=date("Y-m-d");
      //Creamos nuestra consulta sql
      $query="insert into clientes (movil, cedula, fullname, sexo, email, telefono, password, reg_date) value ('$celular', '$cedula', '$nombre','$sexo','$email','$telefono','$clave','$date')";
   

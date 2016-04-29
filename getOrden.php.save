@@ -88,12 +88,12 @@ if($result->num_rows > 0) {
         switch ($row['forma_entrega']) {
             case '1':
                 # code...
-            $row['forma_entrega'] = 'En tienda';
+            $row['forma_entrega'] = 'tienda';
                 break;
             case '2':
                 # code...
-            $row['forma_entrega'] = 'Domicilio';
-                break;            
+            $row['forma_entrega'] = 'domicilio';
+                break;
             default:
                 # code...
             $row['forma_entrega'] = '';

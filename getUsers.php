@@ -20,14 +20,17 @@ require_once 'dbc.php'; // The mysql database connection script
         exit(0);
     }
 
-if(isset($_REQUEST['id_cliente'])){
-$id = $_REQUEST['id_cliente'];
+if(isset($_GET['id_cliente'])){
+$id = $_GET['id_cliente'];
 $query="select reg_id,cedula,fullname,email,sexo,telefono,movil,id_cliente,ciudad,localidad,calle_av,edificio,numero from clientes left join direccion_cliente on(reg_id=id_cliente) where reg_id=$id";
 $result = $mysqli->query($query) or die($mysqli->error.__LINE__);
 
 $arr = array();
 if($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
+        if ($row["cedula"]) {
+           $row["cedulaqr"] = base64_encode(base64_encode($row["cedula"]));
+        }
         $arr[] = $row;  
     }
 }
@@ -35,6 +38,7 @@ if($result->num_rows > 0) {
 {
  $arr=array("error"=>"Faltan Datos");
 }
+
 # JSON-encode the response
 echo $json_response = json_encode($arr);
 ?>

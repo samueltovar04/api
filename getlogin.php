@@ -22,43 +22,37 @@ en la verdadera aplicacion son dinamicos a partir de una base de datos */
         exit(0);
     }
 
-if(isset($_GET['username']) && isset($_GET['password']))
-{
-	$usuarioEnviado = $_GET['username'];
-	$passwordEnviado = $_GET['password'];
 
-	$resultados = array();
- 	$q="select reg_id, cedula, email, password from clientes where email='$usuarioEnviado' and password='$passwordEnviado' limit 1";
- 	$result = mysql_query($q);
+
+$usuarioEnviado = $_GET['username'];
+$passwordEnviado = $_GET['password'];
+$id_dispositivo = $_GET['id_dispositivo'];
+
+$resultados = array();
+ $q="select reg_id, email, cedula, password from clientes where email='$usuarioEnviado' and password='$passwordEnviado' limit 1";
+ $result = mysql_query($q);
 	$row = mysql_fetch_array($result, MYSQL_ASSOC);
-	$usuarioValido = $row['email'];
-	$passwordValido = $row['password'];
-	$id_cliente = $row['reg_id'];
-	$cedula = $row['cedula'];
-	/* verifica que el usuario y password concuerden correctamente */
-	if(  $usuarioEnviado == $usuarioValido  && $passwordEnviado == $passwordValido ){
-		$resultados["mensaje"] = "Usuario Correcto";
-		$resultados["validacion"] = "ok";
-    		$resultados["id_cliente"] = $id_cliente;
-		$resultados["cedula"] = $cedula;
-	}else{
-		/*esta informacion se envia si la validacion falla */
-		$resultados["mensaje"] = "Usuario y password incorrectos";
-		$resultados["validacion"] = "error";
-	}
+$usuarioValido = $row['email'];
+$passwordValido = $row['password'];
+$id_cliente = $row['reg_id'];
+$email = $row['email'];
+
+/* verifica que el usuario y password concuerden correctamente */
+if(  $usuarioEnviado == $usuarioValido  && $passwordEnviado == $passwordValido ){
+	$resultados["mensaje"] = "Usuario Correcto";
+	$resultados["validacion"] = "ok";
+    $resultados["id_cliente"] = $id_cliente;
+    $resultados["email"] = $email;
+    $queryNotificacion="UPDATE clientes SET id_dispositivo = '$id_dispositivo' where reg_id = '$id_cliente'";
+    $resultado = my_query($queryNotificacion);
+
 }else{
-		/*esta informacion se envia si la validacion falla */
-		$resultados["mensaje"] = "Faltan Datos";
-		$resultados["validacion"] = "error";
+	/*esta informacion se envia si la validacion falla */
+	$resultados["mensaje"] = "Usuario y password incorrectos";
+	$resultados["validacion"] = "error";
 }
 
-if(!isset($_GET['jsoncallback']) || empty($_GET['jsoncallback'] ))
-{
-	$json="";
-}else{
-	$json=$_GET['jsoncallback'];
-}
 /*convierte los resultados a formato json*/
 $resultadosJson = json_encode($resultados);
-echo $json . '' . $resultadosJson . '';
+echo $_GET['jsoncallback'] . '' . $resultadosJson . '';
 ?>

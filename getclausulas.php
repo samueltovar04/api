@@ -19,8 +19,10 @@ require_once 'dbc.php'; // The mysql database connection script
 
         exit(0);
     }
+
+
 $mysqli->query('SET CHARACTER SET utf8');
-$query="SELECT titulo, descripcion FROM clausulas where status='1'";
+$query="SELECT titulo, descripcion as descripcion FROM `clausulas`";
 $result = $mysqli->query($query) or die($mysqli->error.__LINE__);
 
 $arr = array();

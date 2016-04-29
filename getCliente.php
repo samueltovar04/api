@@ -20,16 +20,25 @@ require_once 'dbc.php'; // The mysql database connection script
         exit(0);
     }
 
-
-$mysqli->query('SET CHARACTER SET utf8');
-$query="SELECT id_empresa, descripcion FROM `empresas`";
-$result = $mysqli->query($query) or die($mysqli->error.__LINE__);
+if(isset($_REQUEST['cedula'])){
+$id =base64_decode(base64_decode($_REQUEST['cedula']));
+$query="select cedula from clientes where cedula=$id and status='1'";
+$result = $mysqli->query($query);
 
 $arr = array();
 if($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
+        if ($row["cedula"]) {
+           $row["cedula"] = '1';
+        }
         $arr[] = $row;  
     }
+}else{
+ $arr[]=array('cedula'=>'2');
+}
+}else
+{
+ $arr[]=array("cedula"=>"2");
 }
 
 # JSON-encode the response
