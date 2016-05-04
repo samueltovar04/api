@@ -4,7 +4,7 @@ require_once 'dbc.php';
 
 if(isset($_REQUEST['cedula'])){
 	$id = $_REQUEST['cedula'];
- $query="select reg_id,cedula,fullname,email,sexo,telefono,movil,id_cliente,ciudad,localidad,calle_av,edificio,numero from clientes left join direccion_cliente on(reg_id=id_cliente) where cedula=$id";
+ $query="select reg_id,cedula,fullname,email,sexo,telefono,movil,id_cliente,ciudad,direccion from clientes left join direccion_cliente on(reg_id=id_cliente) where cedula=$id";
 	$result = $mysqli->query($query) or die($mysqli->error.__LINE__);
 
 	$arr = array();
