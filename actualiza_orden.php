@@ -37,11 +37,11 @@ if(isset($_REQUEST['id_orden']) && !empty($_REQUEST['id_orden']))
         	$result = mysql_query($q);
 	
 		if($result){
-			$resultados["mensaje"] = "Orden # $usu Recibida por Delivery";
+			$resultados["mensaje"] = "Orden # $usu Recibida por nuestro representante domiciliario ";
 			$resultados["error"] = "1";
 			$up2="update usuario_ordenes set status='3',fecha_cumple='$date' where id_orden='$usu' and status='1'";
         		$resulta = mysql_query($up2);
-			$query="select uo.id_orden,email from usuario_ordenes uo, usuarios u where u.id_usuario=uo.id_usuario and uo.id_orden='$usu' and uo.status='3' limit 1";
+			$query="select uo.id_orden,email,fullname from usuario_ordenes uo, usuarios u where u.id_usuario=uo.id_usuario and uo.id_orden='$usu' and uo.status='3' limit 1";
 			$res = mysql_query($query);
 				$deli=array();
 			if($res){
@@ -52,11 +52,11 @@ if(isset($_REQUEST['id_orden']) && !empty($_REQUEST['id_orden']))
 			
 			
 			$are=array(0=>strtolower(trim($row['email'])),1=>strtolower(trim($deli['email'])));
-                        $mensaje="Estimado(a): ".$row['fullname']."\n\n\t\t La orden de servicio de planchado # $usu Recibida por Delivery \n por soloplancho empresa líder en planchado también visite nuestra web http://www.soloplancho.com\n"
+                        $mensaje="Estimado(a): ".$row['fullname']."\n\n\t\t La orden de servicio de planchado # $usu Recibida por nuestro representante domiciliario ".$deli['fullname']." \n por soloplancho empresa líder en planchado también visite nuestra web http://www.soloplancho.com\n"
                                . "Su cuenta email: ".strtolower(trim($row['email']));
-			$arreglo=array('id_cliente'=>$cli,'titulo'=>"ORDEN SERVICIO RECIBIDA POR DELIVERY",'mensaje'=>$mensaje);
+			$arreglo=array('id_cliente'=>$cli,'titulo'=>"orden de servicio recibida por representante domiciliario",'mensaje'=>$mensaje);
 			enviar_curl("http://api.soloplancho.com/notifications/sendNotification.php", $arreglo);
-                        enviar_mensaje($are, $mensaje, 'ORDEN SERVICIO RECIBIDA POR DELIVERY, SOLOPLANCHO.COM');
+                        enviar_mensaje($are, $mensaje, 'orden de servicio recibida por representante domiciliario, SOLOPLANCHO.COM');
                         
 			
 		}else{
