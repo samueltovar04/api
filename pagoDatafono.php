@@ -18,8 +18,8 @@ if($registro['status']=='10') $chek='Entregada Cliente';
 if($registro['status']=='11') $chek='>Observación';
  */
 $resultados["error"] = "3";
-$resultados["mensaje"] ='';
-if(isset($_REQUEST['id_orden']) && !empty($_REQUEST['id_orden']))
+$resultados["mensaje"] ='Error actualizando orden faltan datos';
+if(isset($_REQUEST['id_orden']) && !empty($_REQUEST['id_orden']) && !empty($_REQUEST['numero']))
 {
 	$ord = $_REQUEST['id_orden'];
 	$query="select o.status,id_orden,reg_id,cedula,fullname,movil,email from orden_servicios o,clientes where reg_id=id_cliente and id_orden='$ord' limit 1";
@@ -32,15 +32,15 @@ if(isset($_REQUEST['id_orden']) && !empty($_REQUEST['id_orden']))
 	$date=date("Y-m-d h:i:s");
 	$q="update pago_ordenes set status='2',numero='$numero',fecha_pago='$date' where id_orden='$ord'";
         $result = mysql_query($q);
-	if( $result){
+	if($result){
 		$resultados["mensaje"] = "Orden # $ord Pago Aceptado";
 		$resultados["error"] = "1";
 		$are=array(0=>strtolower(trim($row['email'])));
-                $mensaje="Estimado(a): ".$row['fullname']."\n\n\t\t La orden  servicio de planchado # $ord Fue Cancela mediante Datafono\n Número de transacción: $numero, Gracias por usar nuestro Servicio de planchado..."
+                $mensaje="Estimado(a): ".$row['fullname']."\n\n\t\t La orden  servicio de planchado # $ord Fue Pagada mediante Datafono\n Número de transacción: $numero, Gracias por usar nuestro Servicio de planchado..."
                                . "Su cuenta email: ".strtolower(trim($row['email']));
 			$arreglo=array('id_cliente'=>$cli,'titulo'=>"ORDEN SERVICIO CANCELADA A DOMICILIO",'mensaje'=>$mensaje);
 			enviar_curl("http://api.soloplancho.com/notifications/sendNotification.php", $arreglo);
-                        enviar_mensaje($are, $mensaje, 'ORDEN SERVICIO CANCELADA A DOMICILIO, SOLOPLANCHO.COM');
+                        enviar_mensaje($are, $mensaje, 'ORDEN SERVICIO CON PAGO EN DOMICILIO, SOLOPLANCHO.COM');
                         
 	}else{
 			$resultados["mensaje"] = "Error actualizando orden ($ord) $q";
