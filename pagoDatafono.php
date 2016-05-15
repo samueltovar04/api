@@ -30,7 +30,7 @@ if(isset($_REQUEST['id_orden']) && !empty($_REQUEST['id_orden']) && isset($_REQU
 	
 	$numero = $_REQUEST['numero'];
 	$date=date("Y-m-d h:i:s");
-	$q="update pago_ordenes set status='2',numero='$numero',fecha_pago='$date' where id_orden='$ord'";
+	$q="update pago_ordenes set status='2',numero='$numero',fecha_pago='$date' where id_orden='$ord' and status='1'";
         $result = mysql_query($q);
 	if($result){
 		$resultados["mensaje"] = "Orden # $ord Pago Aceptado";
