@@ -19,7 +19,7 @@ if($registro['status']=='11') $chek='>Observación';
  */
 $resultados["error"] = "3";
 $resultados["mensaje"] ='Error actualizando orden faltan datos';
-if(isset($_REQUEST['id_orden']) && !empty($_REQUEST['id_orden']) && !empty($_REQUEST['numero']))
+if(isset($_REQUEST['id_orden']) && !empty($_REQUEST['id_orden']) && isset($_REQUEST['numero']))
 {
 	$ord = $_REQUEST['id_orden'];
 	$query="select o.status,id_orden,reg_id,cedula,fullname,movil,email from orden_servicios o,clientes where reg_id=id_cliente and id_orden='$ord' limit 1";
