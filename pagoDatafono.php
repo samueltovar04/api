@@ -38,7 +38,7 @@ if(isset($_REQUEST['id_orden']) && !empty($_REQUEST['id_orden']) && isset($_REQU
 		$are=array(0=>strtolower(trim($row['email'])));
                 $mensaje="Estimado(a): ".$row['fullname']."\n\n\t\t La orden  servicio de planchado # $ord Fue Pagada mediante Datafono\n Número de transacción: $numero, Gracias por usar nuestro Servicio de planchado..."
                                . "Su cuenta email: ".strtolower(trim($row['email']));
-			$arreglo=array('id_cliente'=>$cli,'titulo'=>"ORDEN SERVICIO CANCELADA A DOMICILIO",'mensaje'=>$mensaje);
+			$arreglo=array('id_cliente'=>$cli,'titulo'=>"ORDEN SERVICIO CON PAGO EN DOMICILIO",'mensaje'=>$mensaje);
 			enviar_curl("http://api.soloplancho.com/notifications/sendNotification.php", $arreglo);
                         enviar_mensaje($are, $mensaje, 'ORDEN SERVICIO CON PAGO EN DOMICILIO, SOLOPLANCHO.COM');
                         
