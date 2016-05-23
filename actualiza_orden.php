@@ -7,12 +7,16 @@ include('db.php');
 	$resultados["generador"] = "Enviado desde Solo Plancho" ;
 if(isset($_REQUEST['id_orden']) && !empty($_REQUEST['id_orden']))
 {
-	$usu = $_REQUEST['id_orden'];
-	if(isset($_REQUEST['cedula'])){
+      $usu = $_REQUEST['id_orden'];
+      $orden=explode(" ",$usu);
+      $usu=$orden[0];
+      if(isset($_REQUEST['cedula'])){
 		$ced = base64_decode(base64_decode($_REQUEST['cedula']));
-	}else{
+      }else{
 		$ced =0;
-	}	
+      }	
+      if(isset($orden[1]))
+      {
 
 	if(isset($_REQUEST['latitud'])){
 		$lat = $_REQUEST['latitud'];
@@ -20,7 +24,7 @@ if(isset($_REQUEST['id_orden']) && !empty($_REQUEST['id_orden']))
 		$gps="update clientes set latitud='$lat', longitud='$long' where latitud='0' and cedula='$ced'";
 		$resup = mysql_query($gps);
 	}
-
+        
 	$query="select o.status,id_orden,reg_id,cedula,fullname,movil,email from orden_servicios o,clientes where reg_id=id_cliente and id_orden='$usu' and cedula='$ced' limit 1";
 	$res = mysql_query($query);
 	$date=date("Y-m-d H:i:s");
@@ -108,6 +112,14 @@ if(isset($_REQUEST['id_orden']) && !empty($_REQUEST['id_orden']))
 	$resultados["mensaje"] = "Error Qr Cliente incorrecto verifique datos del cliente";
 	$resultados["error"] = "3";
 	}
+  }else
+   {
+	$q="update balanzas set status='21' where codigo='$usu'";
+        $result = mysql_query($q);
+	$resultados["mensaje"] = "Balanza # $usu Entregada Al Cliente";
+	$resultados["error"] = "1";
+
+   }
 }else{
 	$resultados["mensaje"] = "Error actualizando orden faltan datos";
 	$resultados["error"] = "3";
