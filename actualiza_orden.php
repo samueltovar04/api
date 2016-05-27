@@ -15,8 +15,6 @@ if(isset($_REQUEST['id_orden']) && !empty($_REQUEST['id_orden']))
       }else{
 		$ced =0;
       }	
-      if(isset($orden[1]))
-      {
 
 	if(isset($_REQUEST['latitud'])){
 		$lat = $_REQUEST['latitud'];
@@ -35,6 +33,8 @@ if(isset($_REQUEST['id_orden']) && !empty($_REQUEST['id_orden']))
 	}else{
 		$row=array();
 	}
+if(isset($orden[1]))
+      {
     if(count($row)>1){
 	if($row['status']=='2'){
 		$q="update orden_servicios set status='3' where id_orden='$usu'";
@@ -116,8 +116,14 @@ if(isset($_REQUEST['id_orden']) && !empty($_REQUEST['id_orden']))
    {
 	$q="update balanzas set status='21' where codigo='$usu'";
         $result = mysql_query($q);
-	$resultados["mensaje"] = "Balanza # $usu Entregada Al Cliente";
+	$resultados["mensaje"] = "Kit + Balanza # $usu Entregada Al Cliente";
 	$resultados["error"] = "1";
+	$are=array(0=>strtolower(trim($row['email'])));
+                        $mensaje="Estimado(a): ".$row['fullname']."\n\n\t\t El Kit para realizar orden de servicio de planchado fue entregado en su domicilio \n "
+                        ."Su cuenta email: ".strtolower(trim($row['email']));
+			$arreglo=array('id_cliente'=>$cli,'titulo'=>"KIT ENTREGADO",'mensaje'=>$mensaje);
+			enviar_curl("http://api.soloplancho.com/notifications/sendNotification.php", $arreglo);
+                        enviar_mensaje($are, $mensaje, 'KIT ENTREGADO AL CLIENTE, SOLOPLANCHO.COM');
 
    }
 }else{
