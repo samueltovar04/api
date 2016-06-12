@@ -116,7 +116,7 @@ if(isset($orden[1]))
    {
 	$q="update balanzas set status='21' where codigo='$usu'";
         $result = mysql_query($q);
-	$resultados["mensaje"] = "Kit + Balanza # $usu Entregada Al Cliente";
+	$resultados["mensaje"] = "Kit # $usu Entregada Al Cliente";
 	$resultados["error"] = "1";
 	$are=array(0=>strtolower(trim($row['email'])));
                         $mensaje="Estimado(a): ".$row['fullname']."\n\n\t\t El Kit para realizar orden de servicio de planchado fue entregado en su domicilio \n "

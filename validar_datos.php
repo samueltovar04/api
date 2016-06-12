@@ -26,7 +26,7 @@ $cla = md5($_REQUEST['password']);
 $resultados = array();
 $resultados["hora"] = date("F j, Y, g:i a"); 
 $resultados["generador"] = "Enviado desde Solo Plancho" ;
-$q="select email, cedula,fullname, tipo, id_usuario, u.status,u.id_empresa,descripcion from usuarios u left join empresas e on(e.id_empresa=u.id_empresa) where email='$usu' and clave='$cla' and tipo='3'  and u.status='1' limit 1";
+$q="select email, cedula,fullname, tipo, id_usuario, u.status,u.id_empresa,descripcion from usuarios u left join empresas e on(e.id_empresa=u.id_empresa) where cedula='$usu' and clave='$cla' and tipo='3'  and u.status='1' limit 1";
         $result = mysql_query($q);
 	$row = mysql_fetch_array($result, MYSQL_ASSOC);
 $usuarioValido = $row['email'];
