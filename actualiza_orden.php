@@ -41,7 +41,7 @@ if(isset($orden[1]))
         	$result = mysql_query($q);
 	
 		if($result){
-			$resultados["mensaje"] = "Orden # $usu Recibida por nuestro representante domiciliario ";
+			$resultados["mensaje"] = "Orden # $usu Recibida por nuestro Ikaro ";
 			$resultados["error"] = "1";
 			$up2="update usuario_ordenes set status='3',fecha_cumple='$date' where id_orden='$usu' and status='1'";
         		$resulta = mysql_query($up2);
@@ -56,7 +56,7 @@ if(isset($orden[1]))
 			
 			
 			$are=array(0=>strtolower(trim($row['email'])),1=>strtolower(trim($deli['email'])));
-                        $mensaje="Estimado(a): ".$row['fullname']."\n\n\t\t La orden de servicio de planchado # $usu Recibida por nuestro representante domiciliario ".$deli['fullname']." \n por soloplancho empresa líder en planchado también visite nuestra web http://www.soloplancho.com\n"
+                        $mensaje="Estimado(a): ".$row['fullname']."\n\n\t\t La OS # $usu  ha sido exitosamente recibida por nuestro IKARO: ".$deli['fullname']." \n consultas web http://www.soloplancho.com\n"
                                . "Su cuenta email: ".strtolower(trim($row['email']));
 			$arreglo=array('id_cliente'=>$cli,'titulo'=>"orden de servicio recibida por representante domiciliario",'mensaje'=>$mensaje);
 			enviar_curl("http://api.soloplancho.com/notifications/sendNotification.php", $arreglo);
@@ -86,8 +86,7 @@ if(isset($orden[1]))
 			$resultados["mensaje"] = "Orden # $usu Entregada Al Cliente";
 			$resultados["error"] = "1";
 			$are=array(0=>strtolower(trim($row['email'])),1=>strtolower(trim($deli['email'])));
-                        $mensaje="Estimado(a): ".$row['fullname']."\n\n\t\t La orden de servicio de planchado # $usu Entregada Al Cliente \n por soloplancho empresa líder en planchado también visite nuestra web http://www.soloplancho.com\n"
-                        ."Su cuenta email: ".strtolower(trim($row['email']));
+                        $mensaje="Estimado(a): ".$row['fullname']."\n\n\t\t La OS # $usu ha sido exitosamente entregada.\n​Un gusto atenderle.... \n HASTA SU PRÓXIMA ORDEN DE SERVICIO.\nConsultas web http://www.soloplancho.com\n"."Su cuenta email: ".strtolower(trim($row['email']));
 			$arreglo=array('id_cliente'=>$cli,'titulo'=>"ORDEN SERVICIO ENTREGADA",'mensaje'=>$mensaje);
 			enviar_curl("http://api.soloplancho.com/notifications/sendNotification.php", $arreglo);
                         enviar_mensaje($are, $mensaje, 'ORDEN SERVICIO ENTREGADA AL CLIENTE, SOLOPLANCHO.COM');			
@@ -112,7 +111,7 @@ if(isset($orden[1]))
 	$resultados["mensaje"] = "Error Qr Cliente incorrecto verifique datos del cliente";
 	$resultados["error"] = "3";
 	}
-  }else
+  }/*else
    {
 	$q="update balanzas set status='21' where codigo='$usu'";
         $result = mysql_query($q);
@@ -125,7 +124,7 @@ if(isset($orden[1]))
 			enviar_curl("http://api.soloplancho.com/notifications/sendNotification.php", $arreglo);
                         enviar_mensaje($are, $mensaje, 'KIT ENTREGADO AL CLIENTE, SOLOPLANCHO.COM');
 
-   }
+   }*/
 }else{
 	$resultados["mensaje"] = "Error actualizando orden faltan datos";
 	$resultados["error"] = "3";
