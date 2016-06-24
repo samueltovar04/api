@@ -12,13 +12,14 @@ if(!isset($_REQUEST['id_usuario'])){
 	if($row->Cedula!=NULL)
 		$data[]=$row;
    }
+
 	$q2=mysql_query("select c.cedula Cedula, c.fullname Cliente, c.email Correo, c.movil Movil,c.telefono Telefono, DATE_FORMAT(b.fecha_registro, '%d-%m-%Y') AS \"Fecha Asignado\", ciudad, direccion,b.codigo Orden,'domicilio' as Recepcion,'0' as observacion,b.id_balanza,b.status from clientes c left join direccion_cliente dc on (reg_id=dc.id_cliente) inner join balanzas b on(c.id_balanza=b.id_balanza and b.status=20) inner join usuarios u on (u.id_usuario=b.id_usuario)  where u.id_usuario='$idc'");
 	while ($row2=mysql_fetch_object($q2)){
-		$data2[]=$row2;
+		$data[]=$row2;
 	}
 }
 $resultadosJson= json_encode($data);
-if(empty($resultadosJson)) $resultadosJson='[]';
+if(empty($resultadosJson)) $resultadosJson= '[]';
 echo '{"VALOR"' . ':' . $resultadosJson . '}';
 exit;
 ?>

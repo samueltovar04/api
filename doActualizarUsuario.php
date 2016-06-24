@@ -27,36 +27,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 /*Extraer los datos enviados desde la app*/
 $objDatos = json_decode(file_get_contents("php://input"));
-//var_dump($objDatos[0]);
-
-
 
 /*Guardar los datos en variables*/
-
 if (isset($objDatos[0]->id_cliente)) {
-        //recibo variables desde la app
     $id_cliente = $objDatos[0]->id_cliente;
     $movil = $objDatos[0]->movil;
     $email = $objDatos[0]->email;
     $cedula = $objDatos[0]->cedula;
     $fullname = $objDatos[0]->fullname;
     $sexo = $objDatos[0]->sexo;
-    $telefono = $objDatos[0]->telefono;
 
     $ciudad = $objDatos[0]->ciudad;
-    $localidad = $objDatos[0]->localidad;
-    $calle_av = $objDatos[0]->calle_av;
-    $edificio = $objDatos[0]->edificio;
-    $numero = $objDatos[0]->edificio;
-
+    $localidad = $objDatos[0]->direccion;
 
      //Se crea la consulta de actualizacion
     $query="UPDATE clientes 
              SET movil    = '$movil', 
                  cedula   = '$cedula',
                  fullname = '$fullname',
-                 email    = '$email',
-                 telefono = '$telefono'
+                 email    = '$email'
              where reg_id='$id_cliente'";
 
     //se ejecuta y verifica la ejecucion del query
@@ -64,27 +53,23 @@ if (isset($objDatos[0]->id_cliente)) {
         
         $query2="UPDATE direccion_cliente 
                  SET ciudad     = '$ciudad', 
-                    localidad  = '$localidad',
-                    calle_av   = '$calle_av',
-                    edificio   = '$edificio',
-                    numero     = '$numero'
+                    direccion  = '$localidad'
                 where id_cliente='$id_cliente'";
+
         if(mysql_query($query2))
         {
             $arr["mensaje"] = 'ok';
-            $arr["query1"] = 'query1:    ' . $query;
-            $arr["query2"] = 'query2:    ' . $query2;
         } 
         else 
         {
-            $arr["mensaje"] = 'error en la ejecucion del query direccion' . mysql_error();
+            $arr["mensaje"] = 'error en la ejecucion del query direccion';
         }
 
     }else {
-        $arr["mensaje"] = 'Error actualizando datos: ' . mysql_error();
+        $arr["mensaje"] = 'Error actualizando datos: ';
         }  
  }else {
-    $arr["mensaje"] = 'Error actualizando datos.';
+    $arr["mensaje"] = 'Error recibiendo datos.';
     }
 
 

@@ -22,28 +22,12 @@ require_once 'dbc.php'; // The mysql database connection script
 
 $id_orden = mysql_escape_string($_GET['id_orden']);
 
- /*Se calcula el iva*/
-
-    $query_iva = "SELECT valor  from configuraciones WHERE codigo = 'impuesto'";
-
-    $objIva = $mysqli->query($query_iva) or die($mysqli->error.__LINE__);
-
-    if($objIva->num_rows > 0) {
-        while($rowIva = $objIva->fetch_assoc()) {
-                $iva =  $rowIva['valor'];
-        }
-    }
-
-
-$query="SELECT id_orden, precio_orden, peso_libras, cantidad_piezas, id_cliente, status, forma_entrega, observacion, precio_orden, peso_descuento from orden_servicios where id_orden = '$id_orden'";
+$query="SELECT id_orden, precio_orden, peso_libras, cantidad_piezas, id_cliente, status, forma_entrega, observacion, peso_descuento from orden_servicios where id_orden = '$id_orden'";
 $result = $mysqli->query($query) or die($mysqli->error.__LINE__);
 
 $arr = array();
 if($result->num_rows > 0) {
 	while($row = $result->fetch_assoc()) {
-	        $row['iva']=$iva*$row['precio_orden'];
-        $row['total']=$row['iva']+$row['precio_orden'];
-
         /*defino el mensaje de status*/
         switch ($row['status']) {
             case '1':

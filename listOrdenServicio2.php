@@ -24,7 +24,6 @@ if(!isset($_REQUEST['id_usuario'])){
    }
 }
 $resultadosJson= json_encode($data);
-if(empty($resultadosJson)) $resultadosJson='[]';
 echo '{"VALOR"' . ':' . $resultadosJson . '}';
 exit;
 ?>

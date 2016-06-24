@@ -22,29 +22,36 @@ en la verdadera aplicacion son dinamicos a partir de una base de datos */
         exit(0);
     }
 
+/*Declare variables*/
+$usuarioEnviado = "";
+$passwordEnviado = "";
+$id_dispositivo = "";
+$callback= "";
 
-
-$usuarioEnviado = $_GET['username'];
-$passwordEnviado = $_GET['password'];
-$id_dispositivo = $_GET['id_dispositivo'];
+/*Get variables from json post*/
+if(isset($_GET['username']))         $usuarioEnviado = $_GET['username'];
+if(isset($_GET['password']))         $passwordEnviado = $_GET['password'];
+if(isset($_GET['id_dispositivo']))   $id_dispositivo = $_GET['id_dispositivo'];
+if(isset($_GET['jsoncallback']))     $callback=$_GET['jsoncallback'];
 
 $resultados = array();
- $q="select reg_id, email, cedula, password from clientes where email='$usuarioEnviado' and password='$passwordEnviado' limit 1";
+ $q="select reg_id, email, cedula, password from clientes where cedula='$usuarioEnviado' and password='$passwordEnviado' limit 1";
  $result = mysql_query($q);
 	$row = mysql_fetch_array($result, MYSQL_ASSOC);
 $usuarioValido = $row['email'];
+$cedulaValido = $row['cedula'];
 $passwordValido = $row['password'];
 $id_cliente = $row['reg_id'];
 $email = $row['email'];
 
 /* verifica que el usuario y password concuerden correctamente */
-if(  $usuarioEnviado == $usuarioValido  && $passwordEnviado == $passwordValido ){
+if(  $usuarioEnviado == $cedulaValido  && $passwordEnviado == $passwordValido ){
 	$resultados["mensaje"] = "Usuario Correcto";
 	$resultados["validacion"] = "ok";
     $resultados["id_cliente"] = $id_cliente;
     $resultados["email"] = $email;
     $queryNotificacion="UPDATE clientes SET id_dispositivo = '$id_dispositivo' where reg_id = '$id_cliente'";
-    $resultado = my_query($queryNotificacion);
+    $resultado = mysql_query($queryNotificacion);
 
 }else{
 	/*esta informacion se envia si la validacion falla */
@@ -54,5 +61,5 @@ if(  $usuarioEnviado == $usuarioValido  && $passwordEnviado == $passwordValido )
 
 /*convierte los resultados a formato json*/
 $resultadosJson = json_encode($resultados);
-echo $_GET['jsoncallback'] . '' . $resultadosJson . '';
+echo $callback. '' . $resultadosJson . '';
 ?>

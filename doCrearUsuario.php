@@ -26,13 +26,13 @@
          //Si todo salio bien imprimimos este mensaje
           $ultimo_id = mysql_insert_id();
           $query2="insert into direccion_cliente (ciudad, localidad, calle_av, edificio, numero, id_cliente) value ('$ciudad', '$localidad', '$av','$edificio','$numero','$ultimo_id')";
-        if(mysql_query($query2)){ 
-        echo "ok"; 
-	$are=array(0=>strtolower(strtolower(trim($email))));
-	$mensaje="Estimada(o)\n\tLe damos la mas cordial bienvenida a SoloPlancho." ​
-	."Por favor elabore su Orden de Servicio (OS) vía APP.\n www.soloplancho.com"
-        ."Su cuenta de correo: ".strtolower(trim($email))
-	."Su usuario de ingreso es su Cédula ".$cedula." y Clave: ".trim($clave);
+        if(mysql_query($query2)){
+        echo "ok";
+	$are=array(0=>strtolower(trim($email)));
+	$mensaje="Estimada(o)\n\tLe damos la mas cordial bienvenida a SoloPlancho.\n"
+."Por favor elabore su Orden de Servicio (OS) vía APP.\n www.soloplancho.com\n"
+."Su cuenta de correo: ".strtolower(trim($email))."\n"
+."Su usuario de ingreso es su Cédula ".$cedula." y Clave: ".trim($clave);
 
 	enviar_mensaje($are, $mensaje, 'REGISTRO EXITOSO EN SOLOPLANCHO.COM');
         }else 

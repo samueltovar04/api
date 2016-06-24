@@ -22,7 +22,7 @@ require_once 'dbc.php'; // The mysql database connection script
 
 $id_cliente = mysql_escape_string($_GET['id_cliente']);
 
-$query="select id_orden, precio_orden, peso_libras, cantidad_piezas, id_cliente, status from orden_servicios where id_cliente = '$id_cliente'";
+$query="select id_orden, precio_orden, peso_libras, cantidad_piezas, id_cliente, status from orden_servicios where id_cliente = '$id_cliente' and status != 10";
 $result = $mysqli->query($query) or die($mysqli->error.__LINE__);
 
 $arr = array();

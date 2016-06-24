@@ -30,9 +30,9 @@ $peso_libras=$cantidad_piezas=$recepcion=$id_cliente=$id_empresa=0;
  $objCosto = mysql_query($querycosto);
  $rowCosto = mysql_fetch_array($objCosto, MYSQL_ASSOC);
 
- if( $objDatos->peso_libras != NULL)
+ if( $objDatos->id_cliente != NULL)
  {
-     $peso_libras= $objDatos->peso_libras;
+     $peso_libras= 0;
      $recepcion= $objDatos->recepcion;
      $id_cliente = $objDatos->id_cliente;
      $id_empresa = $objDatos->id_empresa;
@@ -45,14 +45,14 @@ $peso_libras=$cantidad_piezas=$recepcion=$id_cliente=$id_empresa=0;
      }
 
      /*momentaneo*/
-     $objDatos->peso_libras = 0;
+     //$objDatos->peso_libras = 0;
      $objDatos->recepcion = 0;
      $objDatos->id_cliente = 0;
      $objDatos->id_empresa = 0;
 
      foreach ($objDatos as $id => $valor) {
          # code...
-        if ($id !== 'peso_libras' || $id !== 'recepcion' || $id !== 'id_cliente' || $id !== 'id_empresa' || $id !== 'precio') {
+        if ($id !== 'recepcion' || $id !== 'id_cliente' || $id !== 'id_empresa' || $id !== 'precio') {
             # code...
             $cantidad_piezas += $valor;
         }
@@ -62,16 +62,16 @@ $peso_libras=$cantidad_piezas=$recepcion=$id_cliente=$id_empresa=0;
  
    if($recepcion==1){
 	$re="domicilio";
-	$query="INSERT INTO orden_servicios(peso_libras,cantidad_piezas,recepcion,id_cliente, id_empresa, precio_orden,status)  VALUES ('$peso_libras', '$cantidad_piezas', '$re', '$id_cliente', '$id_empresa', '$precio','2')";
+	$query="INSERT INTO orden_servicios(cantidad_piezas,recepcion,id_cliente, id_empresa, precio_orden,status)  VALUES ('$cantidad_piezas', '$re', '$id_cliente', '$id_empresa', '$precio','2')";
 	}
     else if($recepcion==2)
 	{
 		$re="drop-off";
-		$query="INSERT INTO orden_servicios(peso_libras,cantidad_piezas,recepcion,id_cliente, id_empresa, precio_orden) VALUES ('$peso_libras', '$cantidad_piezas', '$re', '$id_cliente', '$id_empresa', '$precio')";
+		$query="INSERT INTO orden_servicios(cantidad_piezas,recepcion,id_cliente, id_empresa, precio_orden) VALUES ('$cantidad_piezas', '$re', '$id_cliente', '$id_empresa', '$precio')";
 	}
 	else{
 		$re="tienda";
-		$query="INSERT INTO orden_servicios(peso_libras,cantidad_piezas,recepcion,id_cliente, id_empresa, precio_orden)  VALUES ('$peso_libras', '$cantidad_piezas', '$re', '$id_cliente', '$id_empresa', '$precio')";
+		$query="INSERT INTO orden_servicios(cantidad_piezas,recepcion,id_cliente, id_empresa, precio_orden)  VALUES ('$cantidad_piezas', '$re', '$id_cliente', '$id_empresa', '$precio')";
 	}
     if(mysql_query($query)){
 
@@ -79,7 +79,7 @@ $peso_libras=$cantidad_piezas=$recepcion=$id_cliente=$id_empresa=0;
 
         foreach ($objDatos as $id => $valor) {
 
-            if ($id !== 'peso_libras' || $id !== 'recepcion' || $id !== 'id_cliente' || $id !== 'id_empresa' || $id !== 'precio') {
+            if ($id !== 'recepcion' || $id !== 'id_cliente' || $id !== 'id_empresa' || $id !== 'precio') {
 
                if ($id != 0) {
                     $query2="insert into orden_articulos (id_orden, id_articulo, cantidad)
@@ -91,7 +91,7 @@ $peso_libras=$cantidad_piezas=$recepcion=$id_cliente=$id_empresa=0;
          }
         echo "ok";
     }else
-        echo "error";
+        echo "error" . mysql_error() . $query;
 
  }else
   echo "error";
