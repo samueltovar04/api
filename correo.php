@@ -84,7 +84,7 @@ function enviar_mensaje($log,$mensaje,$asunto)
 {
     $header = "From: soloplancho@soloplancho.com \n";
     $header .= "Mime-Version: 1.0\nContent-Type: text/html; charset=UTF-8\nContent-Transfer-Encoding: 7bit";
-    $descripcion = "Este mensaje fue enviado por SOLOPLANCHO \"Los Número uno en Planchado\",\n";
+    $descripcion = "Este mensaje fue enviado por SOLOPLANCHO\n";
     $descripcion=utf8_decode($descripcion.$mensaje);
     set_time_limit(0);
     $m = new cMailer();

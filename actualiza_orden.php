@@ -41,7 +41,7 @@ if(isset($orden[1]))
         	$result = mysql_query($q);
 	
 		if($result){
-			$resultados["mensaje"] = "Orden # $usu Recibida por nuestro Ikaro ";
+			$resultados["mensaje"] = "Orden # $usu Recibida por nuestro IKARO ";
 			$resultados["error"] = "1";
 			$up2="update usuario_ordenes set status='3',fecha_cumple='$date' where id_orden='$usu' and status='1'";
         		$resulta = mysql_query($up2);
@@ -56,11 +56,11 @@ if(isset($orden[1]))
 			
 			
 			$are=array(0=>strtolower(trim($row['email'])),1=>strtolower(trim($deli['email'])));
-                        $mensaje="Estimado(a): ".$row['fullname']."\n\n\t\t La OS # $usu  ha sido exitosamente recibida por nuestro IKARO: ".$deli['fullname']." \n consultas web http://www.soloplancho.com\n"
+                        $mensaje="Estimada(o): ".$row['fullname']."\n\n\t\t La OS # $usu  ha sido exitosamente recibida por nuestro IKARO: ".$deli['fullname']." \n http://www.soloplancho.com\n"
                                . "Su cuenta email: ".strtolower(trim($row['email']));
-			$arreglo=array('id_cliente'=>$cli,'titulo'=>"orden de servicio recibida por representante domiciliario",'mensaje'=>$mensaje);
+			$arreglo=array('id_cliente'=>$cli,'titulo'=>"orden de servicio recibida por IKARO",'mensaje'=>$mensaje);
 			enviar_curl("http://api.soloplancho.com/notifications/sendNotification.php", $arreglo);
-                        enviar_mensaje($are, $mensaje, 'orden de servicio recibida por representante domiciliario, SOLOPLANCHO.COM');
+                        enviar_mensaje($are, $mensaje, 'orden de servicio recibida por IKARO, SOLOPLANCHO.COM');
                         
 			
 		}else{
@@ -86,7 +86,7 @@ if(isset($orden[1]))
 			$resultados["mensaje"] = "Orden # $usu Entregada Al Cliente";
 			$resultados["error"] = "1";
 			$are=array(0=>strtolower(trim($row['email'])),1=>strtolower(trim($deli['email'])));
-                        $mensaje="Estimado(a): ".$row['fullname']."\n\n\t\t La OS # $usu ha sido exitosamente entregada.\n​Un gusto atenderle.... \n HASTA SU PRÓXIMA ORDEN DE SERVICIO.\nConsultas web http://www.soloplancho.com\n"."Su cuenta email: ".strtolower(trim($row['email']));
+                        $mensaje="Estimada(o): ".$row['fullname']."\n\n\t\t La OS # $usu ha sido exitosamente entregada.\n​Un gusto atenderle.... \n HASTA SU PRÓXIMA ORDEN DE SERVICIO.\n Apreciamos retornar los ganchos\n http://www.soloplancho.com\n"."Su cuenta email: ".strtolower(trim($row['email']));
 			$arreglo=array('id_cliente'=>$cli,'titulo'=>"ORDEN SERVICIO ENTREGADA",'mensaje'=>$mensaje);
 			enviar_curl("http://api.soloplancho.com/notifications/sendNotification.php", $arreglo);
                         enviar_mensaje($are, $mensaje, 'ORDEN SERVICIO ENTREGADA AL CLIENTE, SOLOPLANCHO.COM');			
