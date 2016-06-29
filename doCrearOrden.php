@@ -1,5 +1,6 @@
 <?php
  include "db.php";
+ include "correo.php";
 
  /* Extrae los valores enviados desde la aplicacion movil */
     if (isset($_SERVER['HTTP_ORIGIN'])) {
@@ -26,7 +27,7 @@ $peso_libras=$cantidad_piezas=$recepcion=$id_cliente=$id_empresa=0;
  $queryArticulos="select descripcion, id_articulo, categoria, status from articulos where status = '1'";
  $objArticulos = mysql_query($queryArticulos);
 
- $querycosto= "select valor from configuraciones where codigo='costo' and status = '1'";
+ $querycosto= "select valor from configuraciones where codigo='costo' and status = '1' limit 1";
  $objCosto = mysql_query($querycosto);
  $rowCosto = mysql_fetch_array($objCosto, MYSQL_ASSOC);
 
@@ -36,6 +37,11 @@ $peso_libras=$cantidad_piezas=$recepcion=$id_cliente=$id_empresa=0;
      $recepcion= $objDatos->recepcion;
      $id_cliente = $objDatos->id_cliente;
      $id_empresa = $objDatos->id_empresa;
+	
+     /* Datos del Cliente */
+     $querycliente= "select fullname,email from clientes where reg_id='$id_cliente' and status = '1' limit 1";
+     $objCliente = mysql_query($querycliente);
+     $rowCliente = mysql_fetch_array($objCliente, MYSQL_ASSOC);
     /*Calculo de precio*/
     if(isset($rowCosto['valor']) && !empty($rowCosto['valor'])){
         $precio= $peso_libras * $rowCosto['valor'];
@@ -87,8 +93,17 @@ $peso_libras=$cantidad_piezas=$recepcion=$id_cliente=$id_empresa=0;
                     mysql_query($query2);
                }
 
-                    }
-         }
+            }
+	}
+	 /* Datos del IKARO*/
+        $queryusu= "select fullname,email,movil,cedula from usuarios u inner join usuario_ordenes us on(us.id_usuario=u.id_usuario and us.status=1) where id_orden='$ultimo_id' limit 1";
+        $objUsu = mysql_query($queryusu);
+        $rowUsuario = mysql_fetch_array($objUsu, MYSQL_ASSOC);
+	$are=array(0=>strtolower(trim($rowCliente['email'])),1=>strtolower(trim($rowUsuario['email'])));
+                        
+        $mensaje="Estimado(a) ".$rowCliente['fullname']."\n\n\t\tEn atención a su orden de servicio # $ord , la misma ha sido asignada a nuestro IKARO:"
+        ."".$rowUsuario['fullname']." Cédula: ".$rowUsuario['cedula']." Celular: ".$rowUsuario['movil'].", para ser retirada en su domicilio.\n  www.soloplancho.com";
+         $this->enviar_mensaje($are, $mensaje, 'ORDEN SERVICIO ASIGNADA A IKARO, SOLOPLANCHO.COM');
         echo "ok";
     }else
         echo "error" . mysql_error() . $query;

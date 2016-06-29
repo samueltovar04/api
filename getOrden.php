@@ -52,11 +52,11 @@ if($result->num_rows > 0) {
                 break;
             case '2':
                 # code...
-            $row['status'] = 'Asignada Delivery';
+            $row['status'] = 'Asignada Ikaro';
                 break;
             case '3':
                 # code...
-            $row['status'] = 'Entregada Delivery';
+            $row['status'] = 'Entregada Ikaro';
                 break;
             case '4':
                 # code...
