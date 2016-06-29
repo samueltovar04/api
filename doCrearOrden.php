@@ -101,7 +101,7 @@ $peso_libras=$cantidad_piezas=$recepcion=$id_cliente=$id_empresa=0;
         $rowUsuario = mysql_fetch_array($objUsu, MYSQL_ASSOC);
 	$are=array(0=>strtolower(trim($rowCliente['email'])),1=>strtolower(trim($rowUsuario['email'])));
                         
-        $mensaje="Estimado(a) ".$rowCliente['fullname']."\n\n\t\tEn atención a su orden de servicio # $ord , la misma ha sido asignada a nuestro IKARO:"
+        $mensaje="Estimado(a) ".$rowCliente['fullname']."\n\n\t\tEn atención a su orden de servicio # $ido , la misma ha sido asignada a nuestro IKARO:"
         ."".$rowUsuario['fullname']." Cédula: ".$rowUsuario['cedula']." Celular: ".$rowUsuario['movil'].", para ser retirada en su domicilio.\n  www.soloplancho.com";
          $this->enviar_mensaje($are, $mensaje, 'ORDEN SERVICIO ASIGNADA A IKARO, SOLOPLANCHO.COM');
         echo "ok";
