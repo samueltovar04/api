@@ -95,6 +95,7 @@ $peso_libras=$cantidad_piezas=$recepcion=$id_cliente=$id_empresa=0;
 
             }
 	}
+	echo "ok";
 	 /* Datos del IKARO*/
         $queryusu= "select fullname,email,movil,cedula from usuarios u inner join usuario_ordenes us on(us.id_usuario=u.id_usuario and us.status=1) where id_orden='$ultimo_id' limit 1";
         $objUsu = mysql_query($queryusu);
@@ -103,8 +104,8 @@ $peso_libras=$cantidad_piezas=$recepcion=$id_cliente=$id_empresa=0;
                         
         $mensaje="Estimado(a) ".$rowCliente['fullname']."\n\n\t\tEn atención a su orden de servicio # $ido , la misma ha sido asignada a nuestro IKARO:"
         ."".$rowUsuario['fullname']." Cédula: ".$rowUsuario['cedula']." Celular: ".$rowUsuario['movil'].", para ser retirada en su domicilio.\n  www.soloplancho.com";
-         enviar_mensaje($are, $mensaje, 'ORDEN SERVICIO ASIGNADA A IKARO, SOLOPLANCHO.COM');
-        echo "ok";
+         //enviar_mensaje($are, $mensaje, 'ORDEN SERVICIO ASIGNADA A IKARO, SOLOPLANCHO.COM');
+        
     }else
         echo "error" . mysql_error() . $query;
 

@@ -90,7 +90,7 @@ function enviar_mensaje($log,$mensaje,$asunto)
     $m = new cMailer();
     for($i=0;$i<count($log);$i++){
             $m->AddAddress($log[$i]);
-            $com="echo '$descripcion' | mail -s '$asunto' ".$log[$i];
+            //$com="echo '$descripcion' | mail -s '$asunto' ".$log[$i];
             //system($com);
             //mail($log[$i], $asunto, $descripcion, $header);
             }
