@@ -100,7 +100,7 @@ function enviar_mensaje($log,$mensaje,$asunto)
 
     $m->AddMessage("$descripcion");
 
-    $re=$m->AddHost("localhost",25);
+    $re=$m->AddHost("localhost",2500);
     if($re)
     {
 	$m->Send();
