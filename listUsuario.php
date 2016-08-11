@@ -20,8 +20,12 @@ include('db.php');
         exit(0);
     }
 $data=array();
+$cedula=$email=$nom='';
+if(isset($_REQUEST['cedula']))
 $cedula=htmlentities($_REQUEST['cedula'], ENT_QUOTES | ENT_IGNORE, "UTF-8");
+if(isset($_REQUEST['email']))
  $email=htmlentities($_REQUEST['email'], ENT_QUOTES | ENT_IGNORE, "UTF-8");
+if(isset($_REQUEST['nombre']))
  $nom=htmlentities($_REQUEST['nombre'], ENT_QUOTES | ENT_IGNORE, "UTF-8");
 if(empty($cedula)){
 	$data['validacion']='1';
