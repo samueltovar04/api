@@ -38,11 +38,17 @@ if(empty($cedula)){
 		if(empty($email) || empty($nom)){
 			$data['validacion']='3';
 		}else{
-			$q=mysql_query("insert into recomendados  (cedula,nombre,email) values ('$cedula','$nom','$email')");
-			$data['validacion']='0';
-			$are=array(0=>strtolower(trim($row['email'])),1=>strtolower(trim($email)));
-		        $mensaje="Estimada(o): ".$nom."\n\n\t\t Nuestro Cliente ".$row['fullname']." le ha recomendado nuestro servicio de planchado &+, visite nuestro sitio http://www.soloplancho.com";
-		         enviar_mensaje($are, $mensaje, 'Servicio de Planchado & +, SOLOPLANCHO.COM');
+			$q=mysql_query("SELECT email FROM recomendados where email='$email' limit 1");
+			$row=mysql_fetch_array($q, MYSQL_ASSOC);
+			if(isset($row['email'])){
+				$data['validacion']='4';
+			}else{
+				$q=mysql_query("insert into recomendados  (cedula,nombre,email) values ('$cedula','$nom','$email')");
+				$data['validacion']='0';
+				$are=array(0=>strtolower(trim($row['email'])),1=>strtolower(trim($email)));
+		        	$mensaje="Estimada(o): ".$nom."\n\n\t\t Nuestro Cliente ".$row['fullname']." le ha recomendado nuestro servicio de planchado &+, visite nuestro sitio http://www.soloplancho.com";
+		        	 enviar_mensaje($are, $mensaje, 'Servicio de Planchado & +, SOLOPLANCHO.COM');
+			}
 		}
 	}
 }
