@@ -98,7 +98,7 @@ $objDatos = json_decode(file_get_contents("php://input"));
 
     $status = 1;
 
-    $query_precio = "SELECT precio_orden from orden_servicios WHERE id_orden = '$id_orden'";
+   /* $query_precio = "SELECT precio_orden from orden_servicios WHERE id_orden = '$id_orden'";
     $objCosto = mysql_query($query_precio); 
     $rowCosto = mysql_fetch_array($objCosto, MYSQL_ASSOC);
     if(mysql_query($query_precio)){
@@ -106,7 +106,7 @@ $objDatos = json_decode(file_get_contents("php://input"));
     }else  
      $precio_pago = $rowCosto['00000'];
 
-    /*Se calcula el iva*/
+    Se calcula el iva
     $query_iva = "SELECT valor  from configuraciones WHERE codigo = 'impuesto'";
     $objIva = mysql_query($query_iva); 
     $rowIva = mysql_fetch_array($objIva, MYSQL_ASSOC);
@@ -114,10 +114,10 @@ $objDatos = json_decode(file_get_contents("php://input"));
         $iva = $precio_pago * $rowIva['valor'];      
     }else  
         $precio_pago = $rowCosto['00000'];
-
-    /*Se calcula el monto total de pago*/
-    $total = $precio_pago + $iva;
-    /*se declara la factura*/
+*/
+    /*Se calcula el monto total de pago
+    $total = $precio_pago + $iva;*/
+    /*se declara la factura
     
     $numero_factura = $id_orden;
     if($id_orden<10){
@@ -133,19 +133,9 @@ $objDatos = json_decode(file_get_contents("php://input"));
             }elseif($id_orden<1000000){
                 $numero_factura='0'.$id_orden;
             } 
-
+*/
      //Creamos nuestra consulta sql
-     $query="INSERT into pago_ordenes (id_orden, precio_pago, iva, total, metodo_pago, numero, forma_pago, id_usuario, status, numero_factura) 
-                                        value ('$id_orden',
-                                        '$precio_pago',
-                                        '$iva',
-                                        '$total',
-                                        '$metodo_pago',
-                                        '$numero',
-                                        '$forma_pago',
-                                        '$id_usuario',
-                                        '$status',
-                                        '$numero_factura')";
+     $query="UPDATE pago_ordenes set metodo_pago='$metodo_pago', numero='$numero', forma_pago='$forma_pago', id_usuario='$id_usuario', status='$status' where id_orden='$id_orden'";
   
     if(mysql_query($query)){
         // y actualizamos la tabla de la orden con el forma_entrega en tienda o delivery  

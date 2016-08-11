@@ -22,7 +22,7 @@ require_once 'dbc.php'; // The mysql database connection script
 
 
 $mysqli->query('SET CHARACTER SET utf8');
-$query="SELECT id_empresa, descripcion FROM `empresas`";
+$query="SELECT id_empresa, empresa as descripcion FROM `empresas`";
 $result = $mysqli->query($query) or die($mysqli->error.__LINE__);
 
 $arr = array();

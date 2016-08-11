@@ -96,16 +96,28 @@ $peso_libras=$cantidad_piezas=$recepcion=$id_cliente=$id_empresa=0;
             }
 	}
 	echo "ok";
+	if($recepcion==1){
 	 /* Datos del IKARO*/
         $queryusu= "select fullname,email,movil,cedula from usuarios u inner join usuario_ordenes us on(us.id_usuario=u.id_usuario and us.status=1) where id_orden='$ultimo_id' limit 1";
+	do{
         $objUsu = mysql_query($queryusu);
         $rowUsuario = mysql_fetch_array($objUsu, MYSQL_ASSOC);
 	$are=array(0=>strtolower(trim($rowCliente['email'])),1=>strtolower(trim($rowUsuario['email'])));
                         
         $mensaje="Estimado(a) ".$rowCliente['fullname']."\n\n\t\tEn atención a su orden de servicio # $ultimo_id , la misma ha sido asignada a nuestro IKARO:"
         ."".$rowUsuario['fullname']." Cédula: ".$rowUsuario['cedula']." Celular: ".$rowUsuario['movil'].", para ser retirada en su domicilio.\n  www.soloplancho.com";
+	   $arreglo=array('id_cliente'=>$id_cliente,'titulo'=>"ORDEN SERVICIO ASIGNADA A IKARO",'mensaje'=>$mensaje);
+	}while(empty($rowUsuario['fullname']));
+	 enviar_curl("http://api.soloplancho.com/notifications/sendNotification.php", $arreglo);
          enviar_mensaje($are, $mensaje, 'ORDEN SERVICIO ASIGNADA A IKARO, SOLOPLANCHO.COM');
-        
+        }else{
+		$are=array(0=>strtolower(trim($rowCliente['email'])));
+                        
+        	$mensaje="Estimado(a) ".$rowCliente['fullname']."\n\n\t\tEn atención a su OS # $ultimo_id , la misma ha solicitado con servicio de entrega en $re";
+		$arreglo=array('id_cliente'=>$id_cliente,'titulo'=>"NUEVA ORDEN DE SERVICIO",'mensaje'=>$mensaje);
+	 	enviar_curl("http://api.soloplancho.com/notifications/sendNotification.php", $arreglo);
+         	enviar_mensaje($are, $mensaje, 'NUEVA ORDEN SERVICIO, SOLOPLANCHO.COM');
+	}
     }else
         echo "error" . mysql_error() . $query;
 
