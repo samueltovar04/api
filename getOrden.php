@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once 'dbc.php'; // The mysql database connection script
 
 /* Extrae los valores enviados desde la aplicacion movil */
@@ -12,7 +12,7 @@ require_once 'dbc.php'; // The mysql database connection script
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
         if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
-            header("Access-Control-Allow-Methods: GET, POST, OPTIONS");         
+            header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 
         if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
             header("Access-Control-Allow-Headers:        {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
@@ -22,28 +22,12 @@ require_once 'dbc.php'; // The mysql database connection script
 
 $id_orden = mysql_escape_string($_GET['id_orden']);
 
- /*Se calcula el iva*/
-
-    $query_iva = "SELECT valor  from configuraciones WHERE codigo = 'impuesto'";
-
-    $objIva = $mysqli->query($query_iva) or die($mysqli->error.__LINE__);
-
-    if($objIva->num_rows > 0) {
-        while($rowIva = $objIva->fetch_assoc()) {
-                $iva =  $rowIva['valor'];
-        }
-    }
-
-
-$query="SELECT id_orden, precio_orden, peso_libras, cantidad_piezas, id_cliente, status, forma_entrega, observacion, precio_orden, peso_descuento from orden_servicios where id_orden = '$id_orden'";
+$query="SELECT id_orden, precio_orden, peso_libras, cantidad_piezas, id_cliente, os.status, forma_entrega, observacion, precio_orden, peso_descuento, s.descripcion as tipo_orden from orden_servicios os inner join servicios s on (os.id_servicio=s.id_servicio) where id_orden = '$id_orden'";
 $result = $mysqli->query($query) or die($mysqli->error.__LINE__);
 
 $arr = array();
 if($result->num_rows > 0) {
 	while($row = $result->fetch_assoc()) {
-	        $row['iva']=$iva*$row['precio_orden'];
-        $row['total']=$row['iva']+$row['precio_orden'];
-
         /*defino el mensaje de status*/
         switch ($row['status']) {
             case '1':
@@ -52,11 +36,11 @@ if($result->num_rows > 0) {
                 break;
             case '2':
                 # code...
-            $row['status'] = 'Asignada Ikaro';
+            $row['status'] = 'Asignada Delivery';
                 break;
             case '3':
                 # code...
-            $row['status'] = 'Entregada Ikaro';
+            $row['status'] = 'Entregada Delivery';
                 break;
             case '4':
                 # code...
@@ -94,7 +78,7 @@ if($result->num_rows > 0) {
                 # code...
             $row['status'] = 'Anulada';
                 break;
-            
+
             default:
                 # code...
             $row['status'] = 'Error contacte a nuestra oficina.';
@@ -104,19 +88,30 @@ if($result->num_rows > 0) {
         switch ($row['forma_entrega']) {
             case '1':
                 # code...
-            $row['forma_entrega'] = 'En tienda';
+                $row['forma_entrega'] = 'En tienda';
                 break;
             case '2':
                 # code...
-            $row['forma_entrega'] = 'Domicilio';
-                break;            
+                $row['forma_entrega'] = 'Domicilio';
+                break;
             default:
                 # code...
-            $row['forma_entrega'] = '';
+                $row['forma_entrega'] = '';
                 break;
         }
-
-		$arr[] = $row;	
+/*        switch ($row['tipo_orden']) {
+          case '1':
+            $row['tipo_orden'] = 'Lavado';
+            break;
+          case '2':
+            $row['tipo_orden'] = 'Planchado';
+            break;
+          default:
+            $row['tipo_orden'] = 'Error contacte a nuestra oficina.';
+            break;
+        }
+*/
+		$arr[] = $row;
 	}
 }
 

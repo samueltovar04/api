@@ -17,7 +17,7 @@ if (isset($_SERVER['HTTP_ORIGIN'])) {
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
     if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
-        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");         
 
     if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
         header("Access-Control-Allow-Headers:        {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
@@ -33,8 +33,8 @@ $metodo_pago= $forma_pago= $status = $forma_entrega = "No definido";
 $objDatos = json_decode(file_get_contents("php://input"));
 
 /*Guardar los datos en variables*/
- if(isset($objDatos->id_usuario))
- {
+ if(isset($objDatos->id_usuario)) 
+ { 
     $id_orden = $objDatos->id_orden;
     $metodo_pago=$objDatos->metodo_pago;
     if (isset($metodo_pago)) {
@@ -53,9 +53,9 @@ $objDatos = json_decode(file_get_contents("php://input"));
                 break;
             case '5':
                 $metodo_pago = 'deposito';
-                break;
+                break;           
             default:
-                $metodo_pago = 'no definido';
+                $metodo_pago = 'No definido';
                 break;
         }
     }
@@ -84,21 +84,21 @@ $objDatos = json_decode(file_get_contents("php://input"));
     if (isset($forma_entrega)) {
         switch ($forma_entrega) {
             case '1':
-                $forma_entrega='tienda';
+                $forma_entrega='Tienda';
                 break;
             case '2':
-                $forma_entrega='domicilio';
+                $forma_entrega='Domicilio';
                 break;
             
             default:
-                $forma_entrega='no definido';
+                $forma_entrega='No definido';
                 break;
         }
     }
 
     $status = 1;
 
-   /* $query_precio = "SELECT precio_orden from orden_servicios WHERE id_orden = '$id_orden'";
+    $query_precio = "SELECT precio_orden from orden_servicios WHERE id_orden = '$id_orden'";
     $objCosto = mysql_query($query_precio); 
     $rowCosto = mysql_fetch_array($objCosto, MYSQL_ASSOC);
     if(mysql_query($query_precio)){
@@ -106,7 +106,7 @@ $objDatos = json_decode(file_get_contents("php://input"));
     }else  
      $precio_pago = $rowCosto['00000'];
 
-    Se calcula el iva
+    /*Se calcula el iva*/
     $query_iva = "SELECT valor  from configuraciones WHERE codigo = 'impuesto'";
     $objIva = mysql_query($query_iva); 
     $rowIva = mysql_fetch_array($objIva, MYSQL_ASSOC);
@@ -114,10 +114,10 @@ $objDatos = json_decode(file_get_contents("php://input"));
         $iva = $precio_pago * $rowIva['valor'];      
     }else  
         $precio_pago = $rowCosto['00000'];
-*/
-    /*Se calcula el monto total de pago
-    $total = $precio_pago + $iva;*/
-    /*se declara la factura
+
+    /*Se calcula el monto total de pago*/
+    $total = $precio_pago + $iva;
+    /*se declara la factura*/
     
     $numero_factura = $id_orden;
     if($id_orden<10){
@@ -133,9 +133,19 @@ $objDatos = json_decode(file_get_contents("php://input"));
             }elseif($id_orden<1000000){
                 $numero_factura='0'.$id_orden;
             } 
-*/
+
      //Creamos nuestra consulta sql
-     $query="UPDATE pago_ordenes set metodo_pago='$metodo_pago', numero='$numero', forma_pago='$forma_pago', id_usuario='$id_usuario', status='$status' where id_orden='$id_orden'";
+     $query="INSERT into pago_ordenes (id_orden, precio_pago, iva, total, metodo_pago, numero, forma_pago, id_usuario, status, numero_factura) 
+                                        value ('$id_orden',
+                                        '$precio_pago',
+                                        '$iva',
+                                        '$total',
+                                        '$metodo_pago',
+                                        '$numero',
+                                        '$forma_pago',
+                                        '$id_usuario',
+                                        '$status',
+                                        '$numero_factura')";
   
     if(mysql_query($query)){
         // y actualizamos la tabla de la orden con el forma_entrega en tienda o delivery  

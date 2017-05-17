@@ -12,7 +12,7 @@ require_once 'dbc.php'; // The mysql database connection script
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
         if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
-            header("Access-Control-Allow-Methods: GET, POST, OPTIONS");         
+            header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 
         if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
             header("Access-Control-Allow-Headers:        {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
@@ -22,13 +22,13 @@ require_once 'dbc.php'; // The mysql database connection script
 
 
 $mysqli->query('SET CHARACTER SET utf8');
-$query="SELECT id_empresa, descripcion FROM `empresas`";
+$query="SELECT id_tipo_servicio, descripcion FROM `servicios`";
 $result = $mysqli->query($query) or die($mysqli->error.__LINE__);
 
 $arr = array();
 if($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
-        $arr[] = $row;  
+        $arr[] = $row;
     }
 }
 

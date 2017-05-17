@@ -22,7 +22,7 @@ require_once 'dbc.php'; // The mysql database connection script
 
 if(isset($_GET['id_cliente'])){
 $id = $_GET['id_cliente'];
-$query="select reg_id,cedula,fullname,email,sexo,movil,id_cliente,ciudad,direccion from clientes left join direccion_cliente on(reg_id=id_cliente) where reg_id=$id";
+$query="select reg_id,cedula,fullname,email,sexo,telefono,movil,id_cliente,ciudad,localidad,calle_av,edificio,numero from clientes left join direccion_cliente on(reg_id=id_cliente) where reg_id=$id";
 $result = $mysqli->query($query) or die($mysqli->error.__LINE__);
 
 $arr = array();

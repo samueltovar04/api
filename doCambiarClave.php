@@ -1,5 +1,4 @@
 <?php 
-include "correo.php";
 include "db.php";  // The mysql database connection script
 
 /* Extrae los valores enviados desde la aplicacion movil */
@@ -34,24 +33,18 @@ include "db.php";  // The mysql database connection script
      $nuevaclave=$objDatos->nuevaclave;
      $confirmaclave=$objDatos->confirmaclave;
 
-     $queryClave= "SELECT fullname,email,password from clientes WHERE reg_id = '$id_usuario'"; 
+     $queryClave= "SELECT password from clientes WHERE reg_id = '$id_usuario'"; 
      $objClave = mysql_query($queryClave); 
      $rowClave = mysql_fetch_array($objClave, MYSQL_ASSOC); 
 
      if ($nuevaclave == $confirmaclave) {
          if ($claveactual == $rowClave['password']) {
-                $query="UPDATE clientes SET password = '$nuevaclave' where cedula = '$email' and reg_id = '$id_usuario'";
+                $query="UPDATE Clientes SET password = '$nuevaclave' where email = '$email' and reg_id = '$id_usuario'";
                 if(mysql_query($query)){
                      //Si todo salio bien imprimimos este mensaje
-                    $arr["mensaje"] = 'ok';
-			$are=array(0=>strtolower(trim($rowClave['email'])));
-                        $mensaje="Estimado(a): ".$rowClave['fullname']."\n\n\t\t Le informamos que su clave de acceso ha sido Actualizada\n"
-			. "Su cuenta email: ".strtolower(trim($rowClave['email']));
-                       
-                        enviar_mensaje($are, $mensaje, 'Clave de Acceso Actualizada, SOLOPLANCHO.COM');
-
+                    $arr["mensaje"] = 'ok';     
                 }else {
-                        $arr["mensaje"] = 'Cédula inválido'. mysql_error();
+                        $arr["mensaje"] = 'Correo inválido';
                 } 
          } else {
             $arr["mensaje"] = 'Error, Clave actual incorrecta.';

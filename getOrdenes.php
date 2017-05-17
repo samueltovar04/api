@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once 'dbc.php'; // The mysql database connection script
 
 /* Extrae los valores enviados desde la aplicacion movil */
@@ -12,7 +12,7 @@ require_once 'dbc.php'; // The mysql database connection script
     if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
         if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
-            header("Access-Control-Allow-Methods: GET, POST, OPTIONS");         
+            header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 
         if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
             header("Access-Control-Allow-Headers:        {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
@@ -22,7 +22,7 @@ require_once 'dbc.php'; // The mysql database connection script
 
 $id_cliente = mysql_escape_string($_GET['id_cliente']);
 
-$query="select id_orden, precio_orden, peso_libras, cantidad_piezas, id_cliente, status from orden_servicios where id_cliente = '$id_cliente' and status != 10";
+$query="select id_orden, precio_orden, peso_libras, cantidad_piezas, id_cliente, os.status, s.descripcion as tipo_orden from orden_servicios os inner join servicios s on (os.id_servicio=s.id_servicio) where id_cliente = '$id_cliente'";
 $result = $mysqli->query($query) or die($mysqli->error.__LINE__);
 
 $arr = array();
@@ -35,11 +35,11 @@ if($result->num_rows > 0) {
                 break;
             case '2':
                 # code...
-            $row['status'] = 'Asignada Ikaro';
+            $row['status'] = 'Asignada Delivery';
                 break;
             case '3':
                 # code...
-            $row['status'] = 'Entregada Ikaro';
+            $row['status'] = 'Entregada Delivery';
                 break;
             case '4':
                 # code...
@@ -77,13 +77,24 @@ if($result->num_rows > 0) {
                 # code...
             $row['status'] = 'Anulada';
                 break;
-            
+
             default:
                 # code...
             $row['status'] = 'Error contacte a nuestra oficina.';
                 break;
         }
-		$arr[] = $row;	
+/*        switch ($row['tipo_orden']) {
+          case '1':
+            $row['tipo_orden'] = 'Lavado';
+            break;
+          case '2':
+            $row['tipo_orden'] = 'Planchado';
+            break;
+          default:
+            $row['tipo_orden'] = 'Error contacte a nuestra oficina.';
+            break;
+        }
+*/		$arr[] = $row;
 	}
 }
 
